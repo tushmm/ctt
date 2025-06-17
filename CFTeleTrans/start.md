@@ -1,2 +1,2 @@
 主人，小狗想你了，可以陪陪小狗嘛
-[喂养小狗](https://github.com/skedl/skedl)  
+
