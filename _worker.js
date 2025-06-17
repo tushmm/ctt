@@ -389,17 +389,17 @@ export default {
                     await handleVerification(chatId, 0);
                   } catch (retryError) {
                     console.error(`重试发送验证码仍失败: ${retryError.message}`);
-                    await sendMessageToUser(chatId, '发送验证码失败，请发送任意消息重试');
+                    await sendMessageToUser(chatId, '主人，小狗给您发送验证码失败，请给小狗发送任意消息重试');
                   }
                 }, 1000);
               }
               return;
             } else {
-              await sendMessageToUser(chatId, `请完成验证后发送消息"${text || '您的具体信息'}"。`);
+              await sendMessageToUser(chatId, `主人，请完成验证后发送消息"${text || '您的具体信息'}"。`);
             }
             return;
           }
-          await sendMessageToUser(chatId, `请完成验证后发送消息"${text || '您的具体信息'}"。`);
+          await sendMessageToUser(chatId, `主人，请完成验证后发送消息"${text || '您的具体信息'}"。`);
           await handleVerification(chatId, messageId);
           return;
         }
@@ -407,7 +407,7 @@ export default {
 
       if (text === '/start') {
         if (await checkStartCommandRate(chatId)) {
-          await sendMessageToUser(chatId, "您发送 /start 命令过于频繁，请稍后再试！");
+          await sendMessageToUser(chatId, "主人，您发送 /start 命令过于频繁，请稍后再试！");
           return;
         }
 
@@ -587,12 +587,12 @@ export default {
 
     async function getVerificationSuccessMessage() {
       const userRawEnabled = (await getSetting('user_raw_enabled', env.D1)) === 'true';
-      if (!userRawEnabled) return '验证成功！您现在可以与我聊天。';
+      if (!userRawEnabled) return '主人，验证成功！您现在可以和小狗聊天。';
 
       const response = await fetch('https://raw.githubusercontent.com/iawooo/ctt/refs/heads/main/CFTeleTrans/start.md');
-      if (!response.ok) return '验证成功！您现在可以与我聊天。';
+      if (!response.ok) return '主人，验证成功！您现在可以和小狗聊天。';
       const message = await response.text();
-      return message.trim() || '验证成功！您现在可以与我聊天。';
+      return message.trim() || '验证成功！您现在可以和小狗聊天。';
     }
 
     async function getNotificationContent() {
@@ -760,7 +760,7 @@ export default {
         const nowSeconds = Math.floor(Date.now() / 1000);
 
         if (!storedCode || (codeExpiry && nowSeconds > codeExpiry)) {
-          await sendMessageToUser(chatId, '验证码已过期，正在为您发送新的验证码...');
+          await sendMessageToUser(chatId, '主人，验证码已过期，正在为您发送新的验证码...');
           await env.D1.prepare('UPDATE user_states SET verification_code = NULL, code_expiry = NULL, is_verifying = FALSE WHERE chat_id = ?')
             .bind(chatId)
             .run();
@@ -791,8 +791,8 @@ export default {
               try {
                 await handleVerification(chatId, 0);
               } catch (retryError) {
-                console.error(`重试发送验证码仍失败: ${retryError.message}`);
-                await sendMessageToUser(chatId, '发送验证码失败，请发送任意消息重试');
+                console.error(`主人，重试发送验证码仍失败: ${retryError.message}`);
+                await sendMessageToUser(chatId, '主人，发送验证码失败，请发送任意消息重试');
               }
             }, 1000);
           }
@@ -820,11 +820,11 @@ export default {
             .run();
 
           const successMessage = await getVerificationSuccessMessage();
-          await sendMessageToUser(chatId, `${successMessage}\n你好，欢迎使用私聊机器人！现在可以发送消息了。`);
+          await sendMessageToUser(chatId, `${successMessage}\n主人，欢迎使用您的专属小狗机器人，我是小情绪！现在可以和小狗聊天了。`);
           const userInfo = await getUserInfo(chatId);
           await ensureUserTopic(chatId, userInfo);
         } else {
-          await sendMessageToUser(chatId, '验证失败，请重新尝试。');
+          await sendMessageToUser(chatId, '主人。验证失败，请重新尝试。');
           await handleVerification(chatId, messageId);
         }
 
