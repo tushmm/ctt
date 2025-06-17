@@ -342,7 +342,7 @@ export default {
             
             if (isCodeExpired) {
               // 如果验证码已过期，重新发送验证码
-              await sendMessageToUser(chatId, '验证码已过期，正在为您发送新的验证码...');
+              await sendMessageToUser(chatId, '主人，验证码已过期，正在为您发送新的验证码...');
               await env.D1.prepare('UPDATE user_states SET verification_code = NULL, code_expiry = NULL, is_verifying = FALSE WHERE chat_id = ?')
                 .bind(chatId)
                 .run();
@@ -388,7 +388,7 @@ export default {
                   try {
                     await handleVerification(chatId, 0);
                   } catch (retryError) {
-                    console.error(`重试发送验证码仍失败: ${retryError.message}`);
+                    console.error(`主人，重试发送验证码仍失败: ${retryError.message}`);
                     await sendMessageToUser(chatId, '主人，小狗给您发送验证码失败，请给小狗发送任意消息重试');
                   }
                 }, 1000);
@@ -412,7 +412,7 @@ export default {
         }
 
         const successMessage = await getVerificationSuccessMessage();
-        await sendMessageToUser(chatId, `${successMessage}\n你好，欢迎使用私聊机器人，现在发送信息吧！`);
+        await sendMessageToUser(chatId, `${successMessage}\n主人，欢迎使用您的专属小狗，现在来和小狗聊天吧！`);
         const userInfo = await getUserInfo(chatId);
         await ensureUserTopic(chatId, userInfo);
         return;
@@ -420,7 +420,7 @@ export default {
 
       const userInfo = await getUserInfo(chatId);
       if (!userInfo) {
-        await sendMessageToUser(chatId, "无法获取用户信息，请稍后再试或联系管理员。");
+        await sendMessageToUser(chatId, "主人，您的信息小狗没有受到，请尝试通过频道联系小狗");
         return;
       }
 
@@ -555,7 +555,7 @@ export default {
         ],
         [
           { text: userRawEnabled ? '关闭用户Raw' : '开启用户Raw', callback_data: `toggle_user_raw_${privateChatId}` },
-          { text: 'GitHub项目', url: 'https://github.com/iawooo/ctt' }
+          { text: '小情绪', url: 'https://github.com/skedl/skedl' }
         ],
         [
           { text: '删除用户', callback_data: `delete_user_${privateChatId}` }
@@ -589,14 +589,14 @@ export default {
       const userRawEnabled = (await getSetting('user_raw_enabled', env.D1)) === 'true';
       if (!userRawEnabled) return '主人，验证成功！您现在可以和小狗聊天。';
 
-      const response = await fetch('https://raw.githubusercontent.com/iawooo/ctt/refs/heads/main/CFTeleTrans/start.md');
+      const response = await fetch('https://raw.githubusercontent.com/tushmm/ctt/refs/heads/main/CFTeleTrans/start.md');
       if (!response.ok) return '主人，验证成功！您现在可以和小狗聊天。';
       const message = await response.text();
       return message.trim() || '验证成功！您现在可以和小狗聊天。';
     }
 
     async function getNotificationContent() {
-      const response = await fetch('https://raw.githubusercontent.com/iawooo/ctt/refs/heads/main/CFTeleTrans/notification.md');
+      const response = await fetch('https://raw.githubusercontent.com/tushmm/ctt/refs/heads/main/CFTeleTrans/notification.md');
       if (!response.ok) return '';
       const content = await response.text();
       return content.trim() || '';
