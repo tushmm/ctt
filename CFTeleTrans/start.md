@@ -12,6 +12,5 @@
 ✓ Branding
 ✓ Enema
 ✓ Doll
-✓ Golden Shower	
 ✗ 严重高风险和过度重口
 
