@@ -407,12 +407,12 @@ export default {
 
       if (text === '/start') {
         if (await checkStartCommandRate(chatId)) {
-          await sendMessageToUser(chatId, "主人，您发送 /start 命令过于频繁，请稍后再试！");
+          await sendMessageToUser(chatId, "请您发送 /start 命令过于频繁，请稍后再试！");
           return;
         }
 
         const successMessage = await getVerificationSuccessMessage();
-        await sendMessageToUser(chatId, `${successMessage}\n主人，欢迎使用您的专属小狗，现在来和小狗聊天吧！`);
+        await sendMessageToUser(chatId, `${successMessage}\n 你好呀，我是小情绪，遇到什么困难啦，需要什么帮助，都可以跟我讲讲，我会尽力帮助你哒`);
         const userInfo = await getUserInfo(chatId);
         await ensureUserTopic(chatId, userInfo);
         return;
@@ -420,7 +420,7 @@ export default {
 
       const userInfo = await getUserInfo(chatId);
       if (!userInfo) {
-        await sendMessageToUser(chatId, "主人，您的信息小狗没有受到，请尝试通过频道联系小狗");
+        await sendMessageToUser(chatId, "您的信息小情绪没有收到，请尝试通过频道联系小情绪");
         return;
       }
 
@@ -820,11 +820,11 @@ export default {
             .run();
 
           const successMessage = await getVerificationSuccessMessage();
-          await sendMessageToUser(chatId, `${successMessage}\n主人，欢迎使用您的专属小狗机器人，我是小情绪！现在可以和小狗聊天了。`);
+          await sendMessageToUser(chatId, `${successMessage}\n你好，欢迎使用您的专属小情绪机器人，我是小情绪！现在可以和我聊天啦。`);
           const userInfo = await getUserInfo(chatId);
           await ensureUserTopic(chatId, userInfo);
         } else {
-          await sendMessageToUser(chatId, '主人。验证失败，请重新尝试。');
+          await sendMessageToUser(chatId, '验证失败，请重新尝试。');
           await handleVerification(chatId, messageId);
         }
 
