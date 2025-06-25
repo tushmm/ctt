@@ -412,7 +412,7 @@ export default {
         }
 
         const successMessage = await getVerificationSuccessMessage();
-        await sendMessageToUser(chatId, `${successMessage}\n 你好呀，我是小情绪，遇到什么困难啦，需要什么帮助，都可以跟我讲讲，我会尽力帮助你哒`);
+        await sendMessageToUser(chatId, `${successMessage}\n你好呀，我是小情绪，遇到什么困难啦，需要什么帮助，都可以跟我讲讲，我会尽力帮助你哒`);
         const userInfo = await getUserInfo(chatId);
         await ensureUserTopic(chatId, userInfo);
         return;
