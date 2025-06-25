@@ -342,7 +342,7 @@ export default {
             
             if (isCodeExpired) {
               // 如果验证码已过期，重新发送验证码
-              await sendMessageToUser(chatId, '主人，验证码已过期，正在为您发送新的验证码...');
+              await sendMessageToUser(chatId, '验证码已过期，正在为您发送新的验证码...');
               await env.D1.prepare('UPDATE user_states SET verification_code = NULL, code_expiry = NULL, is_verifying = FALSE WHERE chat_id = ?')
                 .bind(chatId)
                 .run();
@@ -388,18 +388,18 @@ export default {
                   try {
                     await handleVerification(chatId, 0);
                   } catch (retryError) {
-                    console.error(`主人，重试发送验证码仍失败: ${retryError.message}`);
-                    await sendMessageToUser(chatId, '主人，小狗给您发送验证码失败，请给小狗发送任意消息重试');
+                    console.error(`重试发送验证码仍失败: ${retryError.message}`);
+                    await sendMessageToUser(chatId, '小情绪给您发送验证码失败，请给小狗发送任意消息重试');
                   }
                 }, 1000);
               }
               return;
             } else {
-              await sendMessageToUser(chatId, `主人，请完成验证后发送消息"${text || '您的具体信息'}"。`);
+              await sendMessageToUser(chatId, `请完成验证后发送消息"${text || '您的具体信息'}"。`);
             }
             return;
           }
-          await sendMessageToUser(chatId, `主人，请完成验证后发送消息"${text || '您的具体信息'}"。`);
+          await sendMessageToUser(chatId, `请完成验证后发送消息"${text || '您的具体信息'}"。`);
           await handleVerification(chatId, messageId);
           return;
         }
@@ -587,10 +587,10 @@ export default {
 
     async function getVerificationSuccessMessage() {
       const userRawEnabled = (await getSetting('user_raw_enabled', env.D1)) === 'true';
-      if (!userRawEnabled) return '主人，验证成功！您现在可以和小狗聊天。';
+      if (!userRawEnabled) return '验证成功！您现在可以和小狗聊天。';
 
       const response = await fetch('https://raw.githubusercontent.com/tushmm/ctt/refs/heads/main/CFTeleTrans/start.md');
-      if (!response.ok) return '主人，验证成功！您现在可以和小狗聊天。';
+      if (!response.ok) return '验证成功！您现在可以和小狗聊天。';
       const message = await response.text();
       return message.trim() || '验证成功！您现在可以和小狗聊天。';
     }
@@ -760,7 +760,7 @@ export default {
         const nowSeconds = Math.floor(Date.now() / 1000);
 
         if (!storedCode || (codeExpiry && nowSeconds > codeExpiry)) {
-          await sendMessageToUser(chatId, '主人，验证码已过期，正在为您发送新的验证码...');
+          await sendMessageToUser(chatId, '验证码已过期，正在为您发送新的验证码...');
           await env.D1.prepare('UPDATE user_states SET verification_code = NULL, code_expiry = NULL, is_verifying = FALSE WHERE chat_id = ?')
             .bind(chatId)
             .run();
@@ -791,8 +791,8 @@ export default {
               try {
                 await handleVerification(chatId, 0);
               } catch (retryError) {
-                console.error(`主人，重试发送验证码仍失败: ${retryError.message}`);
-                await sendMessageToUser(chatId, '主人，发送验证码失败，请发送任意消息重试');
+                console.error(`重试发送验证码仍失败: ${retryError.message}`);
+                await sendMessageToUser(chatId, '发送验证码失败，请发送任意消息重试');
               }
             }, 1000);
           }
